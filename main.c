@@ -19,7 +19,7 @@ int main()
     while(1)
     {
         printf("About what are you looking for :\n");
-        printf("1.Home.\t\t\t2Plot.\t\t\t3.Commercial.\n");
+        printf("1.Home.\t\t\t2.Plot.\t\t\t3.Commercial.\n");
         printf("Enter choice:");
         scanf("%d", &ch);
 
