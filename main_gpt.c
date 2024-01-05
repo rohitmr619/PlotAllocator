@@ -165,7 +165,7 @@ int main()
             // Implement functionality for commercial properties
             break;
         default:
-            printf("The program has been terminated.\n \t\t\tThanking you.");
+            printf("The program has been terminated.\n \t\t\tThank you.");
             exit(0);
             break;
         }
