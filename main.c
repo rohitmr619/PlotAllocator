@@ -42,14 +42,13 @@ int main()
                 //recommendation system
             break;
         case 2:
-            //print all buy-able houses(print 3 only, functional navigation buttons required)
-            //print all rent-able houses(print 3 only, functional navigation buttons required)
-            //print all both-able houses(print 3 only, functional navigation buttons required)
-            //take input on rent or buy(chooses from rent and both, or buy and both)
+            //take input on rent or buy(case 1 or 2)
+            //1.print all buy-able houses(print 3 only, functional navigation buttons required)
+            //2.print all rent-able houses(print 3 only, functional navigation buttons required)
 
-            //print all single-standing type houses(print 3 only, functional navigation buttons required)
-            //print all flat houses(print 3 only, functional navigation buttons required)
             //take input on single or flat(case 1 or 2)
+            //1.print all single-standing type houses(print 3 only, functional navigation buttons required)
+            //2.print all flat houses(print 3 only, functional navigation buttons required)
 
             //case 1 : single standing
                 //take inputs - locality,budget(min-max input),no_of_bedrooms,size
