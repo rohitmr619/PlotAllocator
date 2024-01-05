@@ -66,7 +66,10 @@ int main()
                 //recommendation system
             break;
         case 3:
-            
+            //print all buy-able buildings(print 3 only, functional navigation buttons required)
+            //print all lease-able buildings(print 3 only, functional navigation buttons required)
+            //print all both-able buildings(print 3 only, functional navigation buttons required)
+            //take input on lease or buy(chooses from lease and both, or buy and both)
             break;
         default:
             printf("The program has been terminated.\n \t\t\tThanking you.");
