@@ -27,6 +27,13 @@ struct homeRecord
 struct homeRecord HRecord[20];
 int hc = 0;
 
+struct node 
+{
+    struct homeRecord data;
+    int index;
+    struct node *next;
+};
+
 void init()
 {
     for(int i = 0; i<80; i++)
@@ -52,10 +59,51 @@ void buyHome(int i)
     scanf("%*c%c", &c);
 }
 
+void addAtBeg(struct node **head, struct homeRecord *temp, int i)
+{
+    struct node * p = (struct node *)malloc(sizeof(struct node));
+    p->data = *temp;
+    p->index = i;
+    p->next = NULL;
+    if(head == NULL)
+    {
+        *head = p;
+        return ;
+    }
+    p->next = *head;
+    *head = p;
+}
+
+void searchHomesInRange(FILE * fp, struct node **head, int a, int b)
+{
+    struct homeRecord temp;
+    int i=0;
+    while(!feof(fp))
+    {
+        fscanf(fp, "%s %lld %d %d %d %d %d %c %d", temp.house_id, &temp.price, &temp.l.x, &temp.l.y, &temp.s.m, &temp.s.n, &temp.no_of_bedrooms, &temp.type, &temp.year);
+        if(temp.price >=a && temp.price <=b)
+            addAtBeg(head, &temp, i);
+        i++;
+    }
+
+    
+}
+
+void displayList(struct node *head)
+{
+    struct node *p = head;
+    while(p)
+    {
+        printf("%s %lld %d %d %d %d %d %c %d\n",p->data.house_id, p->data.price, p->data.l.x, p->data.l.y, p->data.s.m, p->data.s.n, p->data.no_of_bedrooms, p->data.type, p->data.year);
+        p = p->next;
+    }
+}
+
 int main()
 {
     init();
     int ch, i, j, k;
+    int a, b;
     char c;
     FILE * fpHome;
     while(1)
@@ -137,8 +185,24 @@ int main()
                             }
                         }
                     }
+                    struct node *head = NULL;
                     printf("Search home using [1.Price range.   2.location.   3.size.]\n");
                     printf("Enter choice: ");
+                    scanf("%d", &ch);
+                    switch (ch)
+                    {
+                    case 1:
+                        printf("Enter the price range(min, max): ");
+                        scanf("%d %d", &a, &b);
+                        fseek(fpHome, 0, 0);
+                        searchHomesInRange(fpHome, &head, a, b);
+                        displayList(head);
+                        break;
+                    case 2:
+
+                    default:
+                        break;
+                    }
 
 
                     fclose(fpHome);
