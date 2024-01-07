@@ -560,7 +560,7 @@ int main()
 
                     if(choice == 1)
                         fp = fopen("house_dataset_sale.txt", "r+");
-                    else
+                    else if(choice == 2)
                         fp = fopen("house_dataset_rent.txt", "r+");
 
                     house_info();
