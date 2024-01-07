@@ -53,6 +53,12 @@ int hc = 0;
 //Singly linked list maintained to filter and store data
 struct node *head = NULL;
 
+//Stores Favourites
+struct homeRecord Favourite[20];
+
+//Maintains number of Favourites
+int fav_count = 0;
+
 //Function:     init()
 //Description:  Introduction screen
 //Input Param:  NULL
@@ -96,7 +102,9 @@ void menu3()
 {
     printf("0.Next Five Options\n");
     printf("-1.Previous Five Options\n");
-    printf("-2.Filter Further\n\n");
+    printf("-2.Filter Further\n");
+    printf("-3.View Favourites\n");
+    printf("Or Enter index of displayed property to expand details\n\n");
 }
 
 //Function:     menu4()
@@ -280,6 +288,41 @@ void filterHomes_size(struct node **head,int a,int b) {
     }
 }
 
+//Function:     sortList()
+//Description:  Sorts list based on Price, House ID depending on choice
+//Input Param:  NULL
+//Return type:  NULL
+void sortList()
+{
+    struct node *i, *j;
+    struct node *min;
+    struct homeRecord temp;
+
+    for (i = head; i != NULL; i = i->next)  
+    {
+        min = i;
+        for (j = i->next; j != NULL; j = j->next)
+        {
+            if(choice == 1)
+            {
+                if (j->data.price < min->data.price)
+                    min = j;
+            }
+            else if(choice == 2 || choice == 3)
+            {
+                if(strcmp(j->data.house_id,min->data.house_id) == -1)
+                    min = j;
+            }
+        }
+        if(min != i)
+        {
+            temp = i->data;
+            i->data = min->data;
+            min->data = temp;
+        }
+    }
+}
+
 //Function:     house_filter()
 //Description:  Menu that lets user filter based on price, locality and size 
 //Input Param:  NULL
@@ -298,6 +341,7 @@ void house_filter()
                 scanf("%d %d", &a, &b);
                 fseek(fp, 0, 0);
                 filterHomes_range(&head,a,b);
+                sortList();
                 displayList();
                 clearLinkedList(&head);
                 break;
@@ -306,6 +350,7 @@ void house_filter()
                 scanf("%s",string);
                 fseek(fp,0,0);
                 filterHomes_locality(&head);
+                sortList();
                 displayList();
                 clearLinkedList(&head);
                 break;
@@ -317,11 +362,79 @@ void house_filter()
                 printf("Houses with area of %dx%d feet are\n",a,b);
                 printf("------------------------------------------------------------\n");
                 filterHomes_size(&head,a,b);
+                sortList();
                 displayList();
                 break;
 
         default: printf("Invalid input\n");
                  break;
+    }
+}
+
+void expand_data(int index) 
+{
+    int i;
+    char fav;
+    char string[10];
+    char location[10];
+
+    for(i=0;i<3;i++)
+        string[i] = HRecord[index].house_id[i];
+    string[i] = '\0';
+
+    if(!strcmp(string,"AND"))
+        strcpy(location,"Andheri");
+    else if(!strcmp(string,"AMB"))
+        strcpy(location,"Amboli");
+    else if(!strcmp(string,"CHE"))
+        strcpy(location,"Chembur");
+    else
+        strcpy(location,"Borivalli");
+    
+    if(HRecord[index].type == 'F')
+        strcpy(string,"Flat");
+    else
+        strcpy(string,"Single");
+
+    printf("House ID:%s\n",HRecord[index].house_id);
+    printf("Locality:%s\n",location);
+    printf("Price:Rs.%lld\n",HRecord[index].price);
+    printf("Plot Size:%dx%d sq.feet\n",HRecord[index].s.m,HRecord[index].s.n);
+    printf("Type:%s\n",string);
+    printf("No.of Bedrooms:%d\n",HRecord[index].no_of_bedrooms);
+
+    printf("Press F to add to favourites, press any other character to not:");
+    scanf("%*c%c",&fav);
+    if(tolower(fav) == 'f') {
+        for(int i = 0; i < fav_count;i++) 
+        {
+            if(strcmp(Favourite[i].house_id,HRecord[index].house_id) == 0)
+            {
+                printf("\nAlready in Favourites\n\n");
+                return;
+            }
+        }
+        Favourite[fav_count] = HRecord[index];
+        fav_count++; 
+    }
+}
+
+void displayFavourite()
+{
+    int i;
+    if(fav_count == 0)
+    {
+        printf("No favourites\n");
+        return;
+    }
+    for(i = 0;i<fav_count;i++)
+    {
+        printf("-------%d-------\n",i+1);
+        printf("House ID:%s\n",HRecord[i].house_id);
+        printf("Price:Rs.%lld\n",HRecord[i].price);
+        printf("Plot Size:%dx%d sq.feet\n",HRecord[i].s.m,HRecord[i].s.n);
+        printf("Type:%s\n",string);
+        printf("No.of Bedrooms:%d\n",HRecord[i].no_of_bedrooms);
     }
 }
 
@@ -372,16 +485,23 @@ void house_info()
                 j = 0; 
                 i -= 5;
             }
-
             else if(choice == -2)
                 break;
-            /*else
-                expand_data(choice-1);*/
+            else if(choice == -3)
+                displayFavourite();
+            else
+            {
+                expand_data(choice-1);
+            }
             printf("-----------------------------------------------------\n");
         }
     }
 }
 
+//Function: main()
+//Description: Main function
+//Input Param: NULL
+//Return type: Integer
 int main()
 {
     init();
@@ -406,6 +526,11 @@ int main()
                     house_info();
                     house_filter();
                     break;
+
+            case 2: break;
+
+            case 3: break;
         }
     }
+    return 0;
 }
