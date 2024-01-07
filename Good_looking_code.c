@@ -439,6 +439,24 @@ void displayFavourite()
     }
 }
 
+char * extract_location(char ID[7])
+{
+    int i;
+    char code[4];
+    for(i=0;i<3;i++)
+        code[i] = ID[i];
+    code[i] = '\0';
+    
+    if(strcmp(code,"AND") == 0)
+        return "Andheri";
+    else if(strcmp(code,"AMB") == 0)
+        return "Amboli";
+    else if(strcmp(code,"CHE") == 0)
+        return "Chembur";
+    else if(strcmp(code,"BOR") == 0)
+        return "Borivalli";
+}
+
 //Function:     recommendation_engine()
 //Description:  Recommends houses based on budget and locality
 //Input Param:  Singly linked list, budget and locality
@@ -448,10 +466,13 @@ void recommendation_engine(struct node **head,int budget,char locality[20])
     struct homeRecord temp;
     int i=0;
 
+    clearLinkedList(head);
+    fseek(fp,0,0);
     while(!feof(fp))
     {
         fscanf(fp, "%s %lld %d %d %d %d %d %c %d", temp.house_id, &temp.price, &temp.l.x, &temp.l.y, &temp.s.m, &temp.s.n, &temp.no_of_bedrooms, &temp.type, &temp.year);
-        if(temp.price <= budget && strcasecmp(locality, string) == 0)
+        strcpy(string,extract_location(temp.house_id));
+        if((temp.price <= budget+1500000 && temp.price >= budget) || strcasecmp(locality, string) == 0)
             addAtEnd(head, &temp, i);
         i++;
     }
@@ -462,12 +483,14 @@ void recommendation_engine(struct node **head,int budget,char locality[20])
     while(!feof(fp))
     {
         fscanf(fp, "%s %lld %d %d %d %d %d %c %d", temp.house_id, &temp.price, &temp.l.x, &temp.l.y, &temp.s.m, &temp.s.n, &temp.no_of_bedrooms, &temp.type, &temp.year);
-        if(temp.price > budget && strcasecmp(locality, string) == 0)
+        strcpy(string,extract_location(temp.house_id));
+        if((temp.price >= budget-1500000 && temp.price<=budget) || strcasecmp(locality, string) == 0)
             addAtEnd(head, &temp, i);
         i++;
     }
     displayList();
     clearLinkedList(head);
+    fseek(fp,0,0);
 }
 
 //Function:     house_info()
@@ -527,7 +550,6 @@ void house_info()
                 printf("Enter the Budget and Locality:");
                 scanf("%d %s",&j,string);
                 recommendation_engine(&head,j,string);
-
             }
             else
             {
