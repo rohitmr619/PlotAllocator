@@ -104,6 +104,7 @@ int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix){
     return -1;
 }
 
+
 void sign_in_menu()
 {
     int choice;
@@ -136,3 +137,26 @@ void sign_in()
             printf("Username not found\n");
         }
 }
+
+void buildPrefix(char *pattern, int m, int *prefix) {
+    int length = 0;
+    int i = 1;
+
+    prefix[0] = 0;
+
+    while (i < m) {
+        if (pattern[i] == pattern[length]) {
+            length++;
+            prefix[i] = length;
+            i++;
+        } else {
+            if (length != 0) {
+                length = prefix[length - 1];
+            } else {
+                prefix[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
