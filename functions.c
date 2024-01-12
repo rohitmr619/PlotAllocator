@@ -201,20 +201,38 @@ Description:   Prompts the user to enter the username and password
 */
 void sign_up()
 {
+    int temp_budget;
+    char temp_locality[20];
+    struct size temp_size;
+
     printf("Enter username:");
     scanf("%s", usname);
+
     printf("Enter password:");
     scanf("%s", psword);
+
     password_hasher(psword);
+    printf("Account created successfully!\n\n");
+
+    printf("Let us know what you are looking for to receive personalised recommendations\n\n");
+
+    printf("Locality:");
+    scanf("%s",temp_locality);
+
+    printf("Budget:");
+    scanf("%d",&temp_budget);
+
+    printf("Size of Property(feet x feet):");
+    scanf("%d %d",&temp_size.m,&temp_size.n); 
+
     FILE *fp;
     fp=fopen("username_password.txt","a");
     if (fp == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
-    fprintf(fp, "%s %s\n", usname, psword);
+    fprintf(fp, "%s %s %s %d %d %d\n", usname, psword, temp_locality, temp_budget, temp_size.m, temp_size.n);
     fclose(fp);
-    printf("Account created successfully!\n");
 }
 
 /*
@@ -224,7 +242,7 @@ Return Type:   Updated root of the tree
 Description:   Inserts a node into a binary search tree at
                appropriate position
 */
-TREE * insert_into_bst(TREE * root, int data)
+/*TREE * insert_into_bst(TREE * root, int data)
 {
 	TREE *newnode,*currnode,*parent;
 
@@ -273,7 +291,7 @@ TREE * insert_into_bst(TREE * root, int data)
     // print the successful insertion and return root
     printf("Node inserted successfully into the tree\n");
     return root;
-}
+}*/
 
 /*
 Function Name: inorder
@@ -282,7 +300,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Left, Root, Right
 */
-void inorder(TREE *troot)
+/*void inorder(TREE *troot)
 {
 	if(troot != NULL)
     	{
@@ -290,7 +308,7 @@ void inorder(TREE *troot)
         	printf("%d\t",troot->data);
         	inorder(troot->right);
 	}
-}
+}*/
 
 /*
 Function Name: preorder
@@ -299,7 +317,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Root, Left, Right
 */
-void preorder(TREE *troot)
+/*void preorder(TREE *troot)
 {
 	if(troot != NULL)
 	{
@@ -307,7 +325,7 @@ void preorder(TREE *troot)
         	preorder(troot->left);
         	preorder(troot->right);
 	}
-}
+}*/
 
 
 /*
@@ -317,7 +335,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Left, Right, Root
 */
-void postorder(TREE *troot)
+/*void postorder(TREE *troot)
 {
 	if(troot != NULL)
 	{
@@ -325,7 +343,7 @@ void postorder(TREE *troot)
         	postorder(troot->right);
         	printf("%d\t",troot->data);
 	}
-}
+}*/
 
 
 /*
@@ -336,7 +354,7 @@ Description:   Deletes the specified data and re-adjusts the
                tree structure according to bst tree constraints
 */
 
-TREE * delete_from_bst(TREE * root, int data)
+/*TREE * delete_from_bst(TREE * root, int data)
 {
     TREE * currnode, *parent, *successor, *p;
 
@@ -405,5 +423,5 @@ void profile_set_up()
     scanf("%lld",&budget);
     printf("Enter the location: ");
     scanf("%s",location);
-}
+}*/
 

@@ -15,9 +15,10 @@ int main() {
         scanf("%d",&choice);
         if(choice==1){
             sign_in();
+            break;
         }
         else if(choice==2){
-            //sign_up();
+            sign_up();
             break;
         }
         else if(choice==3)

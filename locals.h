@@ -1,11 +1,6 @@
 #ifndef LOCALS_H_INCLUDED
 #define LOCALS_H_INCLUDED
 
-struct user_credentials {
-    char username[50];
-    char hashed_pass[50];
-};
-
 struct location
 {
     double x, y; // <latitude, longitude>
@@ -14,6 +9,14 @@ struct location
 struct size
 {
     int m,n; // dimensions of the home/plot
+};
+
+struct user_credentials {
+    char username[50];
+    char hashed_pass[50];
+    char user_locality[20];
+    int user_budget;
+    struct size user_size;
 };
 
 struct homeRecord
@@ -48,6 +51,7 @@ char username[20];//stores the username entered by the user
 char password[20];//stores the password entered by the user
 char usname[20];//stores the username entered by the user(temporary variable)
 char psword[20];//stores the password entered by the user(temporary variable)
+
 FILE *fp;//file pointer to open the username_password.txt file
 
 int choice;
