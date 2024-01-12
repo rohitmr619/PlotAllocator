@@ -16,5 +16,6 @@ void password_hasher(char *password);
 void password_compare(char *user_password, char *password);
 void readDataFromFile(struct user_credentials users[], int size, FILE *fp);
 int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix);
+void sign_in_menu();
 
 #endif

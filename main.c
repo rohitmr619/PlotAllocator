@@ -3,8 +3,6 @@
 #include <string.h>
 #include "functions.c"//function.h causing errors at the moment
 
-struct user_credentials users[2]; // initialize an array of type user_credentials,Adjust the size based on the number of users
-
 int main() {
     
     fp=filePointerinit(fp);//opens the username_password.txt file
@@ -12,25 +10,21 @@ int main() {
 
     while (1) {
         mainMenu(); // Menu to display the welcome message and prompt the user to enter the username
-        scanf("%s", username);
-
-        int index = -1;//stores the index of the username in the users array
-        for (int i = 0; i < 2; i++) {
-            int prefix[50]; // Adjust the size based on the maximum length of the username
-            Knuth_Morris_Pratt(users[i].username, username, prefix);//calls the Knuth_Morris_Pratt function to find the index of the username in the users array
-            index = Knuth_Morris_Pratt(username, users[i].username, prefix);//stores the index of the username in the users array if found, else -1 remains.
-
-            if (index != -1) {
-                printf("Welcome %s \n", username);
-                printf("Enter the password to continue\n");
-                scanf("%s", password);
-                password_compare(users[index].hashed_pass, password);
-                break;
-            }
+        sign_in_menu();
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+        if(choice==1){
+            sign_in();
         }
-
-        if (index == -1) {
-            printf("Username not found\n");
+        else if(choice==2){
+            //sign_up();
+            break;
+        }
+        else if(choice==3)
+            continue;
+        else{
+            printf("Invalid choice\n");
+            exit(0);
         }
     }
 

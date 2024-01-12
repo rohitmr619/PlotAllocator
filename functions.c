@@ -10,14 +10,12 @@
 //Input param:  NULL
 //Return Type:  NULL
 void mainMenu() {
-    printf("\n");
-    printf("*****************************************\n");
-    printf("*                                       *\n");
-    printf("*   Welcome to the Home Purchase Bot    *\n");
-    printf("*                                       *\n");
-    printf("*****************************************\n");
-    printf("\n");
-    printf("Please enter your username: ");
+    for(int i = 0; i<80; i++)
+        printf("*");
+    printf("\n\t\t\tHOME PURCHASE BOT\n\n");
+    for(int i = 0; i<80; i++)
+        printf("*");
+    printf("\n\n");
 }
 
 //Function:     filePointerinit
@@ -40,7 +38,7 @@ FILE* filePointerinit(FILE *fp){
 void password_hasher(char *password) {
     int i;
     for (i = 0; password[i] != '\0'; i++) {
-        password[i] = (password[i] + 3) % 128;
+        password[i] = (password[i] + 3);
     }
 }
 
@@ -79,7 +77,7 @@ void readDataFromFile(struct user_credentials users[], int size, FILE *fp) {
 //              pattern(const char *) - Username stored in the users array
 //              prefix(int *) - Array to store the prefix values
 //Return Type:  int - Index of the username in the users array
-int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix) {
+int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix){
     int i = 0;
     int j = 0;
     int text_len = strlen(text);
@@ -89,7 +87,8 @@ int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix) {
         if (text[i] == pattern[j]) {
             i++;
             j++;
-        } else {
+        } 
+        else {
             if (j != 0) {
                 j = prefix[j - 1];
             } else {
@@ -103,4 +102,37 @@ int Knuth_Morris_Pratt(const char *text, const char *pattern, int *prefix) {
     }
 
     return -1;
+}
+
+void sign_in_menu()
+{
+    int choice;
+    printf("1.Sign in \n");
+    printf("2.Register \n");
+    printf("3.Continue as a Guest \n\n");
+}
+
+void sign_in()
+{
+    printf("Enter username:");
+    scanf("%s", username);
+
+        int index = -1;//stores the index of the username in the users array
+        for (int i = 0; i < 2; i++) {
+            int prefix[50]; // Adjust the size based on the maximum length of the username
+            Knuth_Morris_Pratt(users[i].username, username, prefix);//calls the Knuth_Morris_Pratt function to find the index of the username in the users array
+            index = Knuth_Morris_Pratt(username, users[i].username, prefix);//stores the index of the username in the users array if found, else -1 remains.
+
+            if (index != -1) {
+                printf("Welcome %s \n", username);
+                printf("Enter the password to continue\n");
+                scanf("%s", password);
+                password_compare(users[index].hashed_pass, password);
+                break;
+            }
+        }
+
+        if (index == -1) {
+            printf("Username not found\n");
+        }
 }

@@ -31,6 +31,6 @@ char username[20];//stores the username entered by the user
 char password[20];//stores the password entered by the user
 FILE *fp;//file pointer to open the username_password.txt file
 
-
-
+int choice;
+struct user_credentials users[2]; // initialize an array of type user_credentials,Adjust the size based on the number of users
 #endif // LOCALS_H_INCLUDED
