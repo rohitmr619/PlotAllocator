@@ -79,7 +79,7 @@ Description:   Reads data from username_password.txt and stores it in users arra
 void readDataFromFile(struct user_credentials users[], int size, FILE *fp) {
     int counter=0;
    for(counter=0; !feof(fp) && counter<size; counter++)
-        fscanf(fp, "%s %s", users[counter].username,users[counter].hashed_pass);
+        fscanf(fp, "%s %s", users[counter].username, users[counter].hashed_pass, users[counter].user_locality, &users[counter].user_budget, &users[counter].user_size.m, &users[counter].user_size.n);
     fclose(fp);
 }
 
@@ -174,7 +174,7 @@ void sign_in()
     scanf("%s", username);
 
         int index = -1;//stores the index of the username in the users array
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             int prefix[50]; // Adjust the size based on the maximum length of the username
             Knuth_Morris_Pratt(users[i].username, username, prefix);//calls the Knuth_Morris_Pratt function to find the index of the username in the users array
             index = Knuth_Morris_Pratt(username, users[i].username, prefix);//stores the index of the username in the users array if found, else -1 remains.
