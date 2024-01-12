@@ -214,7 +214,8 @@ void sign_up()
     password_hasher(psword);
     printf("Account created successfully!\n\n");
 
-    printf("Let us know what you are looking for to receive personalised recommendations\n\n");
+    printf("Let us know what you are looking for to receive personalised recommendations\n");
+    printf("----------------------------------------------------------------------------\n");
 
     printf("Locality:");
     scanf("%s",temp_locality);
