@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "locals.h"
-//#include "functions.h" //Causing errors at the moment
 
 
 /*
@@ -29,7 +28,8 @@ Description:   Opens the username_password.txt file
 */
 FILE* filePointerinit(FILE *fp){
     fp=fopen("username_password.txt","r");
-    if (fp == NULL) {
+    fp1=fopen("house_dataset_sale.txt","r");
+    if (fp == NULL || fp1 == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
@@ -50,6 +50,24 @@ void password_hasher(char *password) {
 }
 
 /*
+Function Name: brute_force_compare
+Input Params:  str1(char *) - String 1
+               str2(char *) - String 2
+Return Type:   int
+Description:   Compares two strings using the brute force method
+*/
+int brute_force_compare(char *str1, char *str2) {
+    while (*str1 != '\0' && *str2 != '\0') {
+        if (*str1 != *str2) {
+            return 0; // Strings are not equal
+        }
+        str1++;
+        str2++;
+    }
+    return (*str1 == '\0' && *str2 == '\0'); // Both strings are equal if both are null-terminated
+}
+
+/*
 Function Name: password_compare
 Input Params:  user_password(char *) - Hashed password stored in the users array
                password(char *) - Hashed password entered by the user
@@ -58,12 +76,10 @@ Description:   Compares the hashed password entered by the user with the hashed 
 */
 void password_compare(char *user_password, char *password) {
     password_hasher(password);
-    if (strcmp(user_password, password) == 0) {
-        printf("\n");
-        printf("Password accepted!\n");
+    if (brute_force_compare(user_password, password)) {
+        printf("\nPassword accepted!\n");
     } else {
-        printf("\n");
-        printf("Password incorrect!\n");
+        printf("\nPassword incorrect!\n");
         exit(0);
     }
 }
@@ -76,10 +92,17 @@ Input Params:  users(struct user_credentials []) - Array of type user_credential
 Return Type:   NULL
 Description:   Reads data from username_password.txt and stores it in users array.
 */
-void readDataFromFile(struct user_credentials users[], int size, FILE *fp) {
+void readDataFromFile(struct user_credentials users[], int size,FILE *fp) {
     int counter=0;
-   for(counter=0; !feof(fp) && counter<size; counter++)
-        fscanf(fp, "%s %s", users[counter].username, users[counter].hashed_pass, users[counter].user_locality, &users[counter].user_budget, &users[counter].user_size.m, &users[counter].user_size.n);
+    int budget=0;
+   for(counter=0; !feof(fp) && counter<size; counter++){
+        fscanf(fp, "%s %s %s %d %d %d", users[counter].username, users[counter].hashed_pass, users[counter].user_locality, &users[counter].user_budget, &users[counter].user_size.m, &users[counter].user_size.n);
+   }
+   for(counter=0;!feof(fp);counter++)
+   {
+        fscanf(fp1,"%d",&budget);
+        insert_into_bst(root,budget);
+   }
     fclose(fp);
 }
 
@@ -176,9 +199,16 @@ void sign_in()
         int index = -1;//stores the index of the username in the users array
         for (int i = 0; i < 3; i++) {
             int prefix[50]; // Adjust the size based on the maximum length of the username
+            if(strlen(users[i].username)==strlen(username))
+            {
             Knuth_Morris_Pratt(users[i].username, username, prefix);//calls the Knuth_Morris_Pratt function to find the index of the username in the users array
             index = Knuth_Morris_Pratt(username, users[i].username, prefix);//stores the index of the username in the users array if found, else -1 remains.
-
+            }
+            else
+            {
+                //printf("Username not found! \n");
+                break;
+            }
             if (index != -1) {
                 printf("Welcome %s \n", username);
                 printf("Enter the password to continue\n");
@@ -192,6 +222,8 @@ void sign_in()
             printf("Username not found! \n");
         }
 }
+
+
 
 /*
 Function Name: sign_up
@@ -212,6 +244,7 @@ void sign_up()
     scanf("%s", psword);
 
     password_hasher(psword);
+
     printf("Account created successfully!\n\n");
 
     printf("Let us know what you are looking for to receive personalised recommendations\n");
@@ -236,6 +269,19 @@ void sign_up()
     fclose(fp);
 }
 
+struct tree
+{
+	int data;
+	struct tree *left;
+	struct tree *right;
+};
+typedef struct tree TREE;
+TREE * root;
+root = NULL;
+int choice = 0;
+int data = 0;
+int count = 0;
+
 /*
 Function Name: insert_into_bst
 Input Params:  Root of the tree and data item to be inserted
@@ -243,7 +289,7 @@ Return Type:   Updated root of the tree
 Description:   Inserts a node into a binary search tree at
                appropriate position
 */
-/*TREE * insert_into_bst(TREE * root, int data)
+TREE * insert_into_bst(TREE * root, int data)
 {
 	TREE *newnode,*currnode,*parent;
 
@@ -292,7 +338,7 @@ Description:   Inserts a node into a binary search tree at
     // print the successful insertion and return root
     printf("Node inserted successfully into the tree\n");
     return root;
-}*/
+}
 
 /*
 Function Name: inorder
@@ -301,7 +347,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Left, Root, Right
 */
-/*void inorder(TREE *troot)
+void inorder(TREE *troot)
 {
 	if(troot != NULL)
     	{
@@ -309,7 +355,7 @@ Description:   Recursively visits the tree in the order of
         	printf("%d\t",troot->data);
         	inorder(troot->right);
 	}
-}*/
+}
 
 /*
 Function Name: preorder
@@ -318,7 +364,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Root, Left, Right
 */
-/*void preorder(TREE *troot)
+void preorder(TREE *troot)
 {
 	if(troot != NULL)
 	{
@@ -326,7 +372,7 @@ Description:   Recursively visits the tree in the order of
         	preorder(troot->left);
         	preorder(troot->right);
 	}
-}*/
+}
 
 
 /*
@@ -336,7 +382,7 @@ Return Type:   void
 Description:   Recursively visits the tree in the order of
                Left, Right, Root
 */
-/*void postorder(TREE *troot)
+void postorder(TREE *troot)
 {
 	if(troot != NULL)
 	{
@@ -344,7 +390,7 @@ Description:   Recursively visits the tree in the order of
         	postorder(troot->right);
         	printf("%d\t",troot->data);
 	}
-}*/
+}
 
 
 /*
@@ -355,7 +401,7 @@ Description:   Deletes the specified data and re-adjusts the
                tree structure according to bst tree constraints
 */
 
-/*TREE * delete_from_bst(TREE * root, int data)
+TREE * delete_from_bst(TREE * root, int data)
 {
     TREE * currnode, *parent, *successor, *p;
 
@@ -417,12 +463,22 @@ Description:   Deletes the specified data and re-adjusts the
     return root;
 }
 
-
-void profile_set_up()
+search(TREE *root,int data)
 {
-    printf("Enter your budget range: ");
-    scanf("%lld",&budget);
-    printf("Enter the location: ");
-    scanf("%s",location);
-}*/
+    if(root==NULL)
+    {
+        //printf("Tree is empty\n");
+        return 0;
+    }
+    if(root->data==data)
+    {
+        //printf("Item found\n");
+        return 1;
+    }
+    if(data<root->data)
+        search(root->left,data);
+    else
+        search(root->right,data);
+}
+
 

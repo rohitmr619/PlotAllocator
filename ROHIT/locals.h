@@ -52,7 +52,7 @@ char password[20];//stores the password entered by the user
 char usname[20];//stores the username entered by the user(temporary variable)
 char psword[20];//stores the password entered by the user(temporary variable)
 
-FILE *fp;//file pointer to open the username_password.txt file
+FILE *fp, *fp1;//file pointer to open the username_password.txt file
 
 int choice;
 struct user_credentials users[100]; // initialize an array of type user_credentials,Adjust the size based on the number of users
