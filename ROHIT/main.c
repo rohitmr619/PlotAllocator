@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "functions.c"//function.h causing errors at the moment
+#include "functions.c"
+#include <limits.h>
 
 int main() {
     
@@ -29,6 +30,7 @@ int main() {
             printf("Search for specific budget? press 1 to continue: \n");
             printf("Check all the records sorted by price? press 2 to continue: \n");
             printf("Search for a specific locality? press 3 to continue: \n");
+            printf("Search for other nearby houses? press 4 to continue: \n");
             scanf("%d", &choice);
             if(choice==1)
             {
@@ -81,6 +83,20 @@ int main() {
                     printf("%d ", budget_sort[i]);
                 }
                 printf("\n" );
+            }
+            else if(choice==4)
+            {
+                printf("Choose the house you want to search around: \n");
+                inorder(root);
+                scanf("%d", &house_number);
+                printf("The houses around the house you chose are: \n");
+                dijikstra(graph,house_number+1,nearest_houses);
+                for(int i=0;i<3;i++)
+                {
+                    printf("%s %d %d %d %d %d %d %c %d\n",records[nearest_houses[i]].location, &records[nearest_houses[i]].price, &records[nearest_houses[i]].x_cord, 
+                    &records[nearest_houses[i]].y_cord, &records[nearest_houses[i]].sizel, &records[nearest_houses[i]].sizeb, &records[nearest_houses[i]].no_of_bedrooms, 
+                    &records[nearest_houses[i]].type, &records[nearest_houses[i]].year);
+                }
             }
             else
             {

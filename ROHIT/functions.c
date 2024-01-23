@@ -724,8 +724,6 @@ void bad_luck_sort(int arr[],int n)
     }
 }
 
-
-
 #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
  
 // Alphabet size (# of symbols)
@@ -823,5 +821,44 @@ bool search_trie(struct TrieNode *root, const char *key)
     }
  
     return (pCrawl->isEndOfWord);
+}
+
+
+//print the nearest houses to given house
+void dijikstra(int graph[NUM_HOUSES][NUM_HOUSES], int src, int nearestHouses[NUM_HOUSES]) {
+    int dist[NUM_HOUSES]; // Shortest distance from source to each house
+    int visited[NUM_HOUSES]; // Marks whether a house is visited or not
+
+    // Initialize distances and visited array
+    for (int i = 0; i < NUM_HOUSES; i++) {
+        dist[i] = 999;
+        visited[i] = 0;
+    }
+
+    dist[src] = 0; // Distance from source to itself is 0
+
+    for (int count = 0; count < NUM_HOUSES - 1; count++) {
+        int minDist = 999;
+        int minIndex;
+
+        // Find the house with the minimum distance
+        for (int i = 0; i < NUM_HOUSES; i++) {
+            if (!visited[i] && dist[i] < minDist) {
+                minDist = dist[i];
+                minIndex = i;
+            }
+        }
+
+        visited[minIndex] = 1; // Mark the selected house as visited
+
+        // Update the distance values of adjacent houses
+        for (int i = 0; i < NUM_HOUSES; i++) {
+            if (!visited[i] && graph[minIndex][i] && dist[minIndex] != 999
+                && dist[minIndex] + graph[minIndex][i] < dist[i]) {
+                dist[i] = dist[minIndex] + graph[minIndex][i];
+                nearestHouses[i] = minIndex; // Store the row number of the nearest house
+            }
+        }
+    }
 }
 
