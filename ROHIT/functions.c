@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include<stdbool.h>
 #include "locals.h"
+#include"functions.h"
 
 
 /*
@@ -24,12 +26,11 @@ Function Name: filePointerinit
 Input Params:  NULL
 Return Type:   FILE *
 Description:   Opens the username_password.txt file
-
 */
 void filePointerinit(){
-    fp=fopen("username_password.txt","r");
-    fp1=fopen("house_dataset_sale.txt","r");
-    if (fp == NULL || fp1 == NULL) {
+    fp1=fopen("username_password.txt","r");
+    fp2=fopen("house_dataset_sale.txt","r");
+    if (fp1 == NULL || fp2 == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
@@ -91,18 +92,34 @@ Input Params:  users(struct user_credentials []) - Array of type user_credential
 Return Type:   NULL
 Description:   Reads data from username_password.txt and stores it in users array.
 */
-void readDataFromFile(struct user_credentials users[], int size,FILE *fp) {
+
+void readDataFromFile(struct user_credentials users[],struct homeRecord records[], int size) 
+{
+    trie_root = getNode_trie();
     int counter=0;
     int budget=0;
-   for(counter=0; !feof(fp) && counter<size; counter++){
-        fscanf(fp, "%s %s %s %d %d %d", users[counter].username, users[counter].hashed_pass, users[counter].user_locality, &users[counter].user_budget, &users[counter].user_size.m, &users[counter].user_size.n);
+    char cities[4];
+    int i = 0;
+    int temp;
+    char temp_c;
+    //printf("lama");
+   for(counter=0; !feof(fp1) && counter<size; counter++){
+        fscanf(fp1, "%s %s %s %d %d %d", users[counter].username, users[counter].hashed_pass, users[counter].user_locality, &users[counter].user_budget, &users[counter].user_size.m, &users[counter].user_size.n);
    }
-   for(counter=0;!feof(fp);counter++)
-   {
-        fscanf(fp1,"%d",&budget);
-        insert_into_bst(root,budget);
+
+   for(i=0; !feof(fp2); i++){
+        fscanf(fp2, "%s %d %d %d %d %d %d %c %d",records[i].location, &records[i].price, &records[i].x_cord, &records[i].y_cord, &records[i].sizel, &records[i].sizeb, &records[i].no_of_bedrooms, &records[i].type, &records[i].year);
    }
-    fclose(fp);
+   fseek(fp2, 0, SEEK_SET);
+   while (fscanf(fp2, "%s %d %d %d %d %d %d %c %d", cities, &budget_sort[i], &temp, &temp, &temp, &temp, &temp, &temp_c, &temp) != EOF) 
+    {
+        //printf("%s", cities);
+       insert_trie(trie_root, cities);
+       i++;
+    }
+    
+    //printf("lama");
+    budget_size = i;
 }
 
 /*
@@ -268,18 +285,6 @@ void sign_up()
     fclose(fp);
 }
 
-struct tree
-{
-	int data;
-	struct tree *left;
-	struct tree *right;
-};
-typedef struct tree TREE;
-TREE * root;
-root = NULL;
-int choice = 0;
-int data = 0;
-int count = 0;
 
 /*
 Function Name: insert_into_bst
@@ -288,7 +293,7 @@ Return Type:   Updated root of the tree
 Description:   Inserts a node into a binary search tree at
                appropriate position
 */
-TREE * insert_into_bst(TREE * root, int data)
+TREE * insert_into_bst(TREE * root, struct homeRecord temp)
 {
 	TREE *newnode,*currnode,*parent;
 
@@ -303,7 +308,7 @@ TREE * insert_into_bst(TREE * root, int data)
 	}
 
 	// Initialize the tree node elements
-	newnode->data = data;
+	newnode->data = temp;
 	newnode->left = NULL;
 	newnode->right = NULL;
 
@@ -311,7 +316,7 @@ TREE * insert_into_bst(TREE * root, int data)
 	if(root == NULL)
 	{
 		root = newnode;
-		printf("Root node inserted into tree\n");
+		//printf("Root node inserted into tree\n");
 		return root;
 	}
 
@@ -322,20 +327,20 @@ TREE * insert_into_bst(TREE * root, int data)
 	while(currnode != NULL)
 	{
 		parent = currnode;
-		if(newnode->data < currnode->data)
+		if(newnode->data.price < currnode->data.price)
 			currnode = currnode->left;
 		else
 			currnode = currnode->right;
 	}
 
     // Attach the node at appropriate place using parent
-	if(newnode->data < parent->data)
+	if(newnode->data.price < parent->data.price)
 		parent->left = newnode;
 	else
 		parent->right = newnode;
 
     // print the successful insertion and return root
-    printf("Node inserted successfully into the tree\n");
+    //printf("Node inserted successfully into the tree\n");
     return root;
 }
 
@@ -351,7 +356,7 @@ void inorder(TREE *troot)
 	if(troot != NULL)
     	{
         	inorder(troot->left);
-        	printf("%d\t",troot->data);
+        	printf("%s\t %d\t %d\t %d\t %d\t %d\t %d\t %c\t %d\t \n",troot->data.location,troot->data.price,troot->data.x_cord,troot->data.y_cord,troot->data.sizel,troot->data.sizeb,troot->data.no_of_bedrooms,troot->data.type,troot->data.year);
         	inorder(troot->right);
 	}
 }
@@ -414,10 +419,10 @@ TREE * delete_from_bst(TREE * root, int data)
     // Traverse and reach the appropriate part of the tree
     parent = NULL;
     currnode = root;
-    while (currnode != NULL && data != currnode->data)
+    while (currnode != NULL && data != currnode->data.price)
     {
         parent = currnode;
-        if(data < currnode->data)
+        if(data < currnode->data.price)
             currnode  = currnode->left;
         else
             currnode = currnode->right;
@@ -462,25 +467,45 @@ TREE * delete_from_bst(TREE * root, int data)
     return root;
 }
 
-search(TREE *root,int data)
+/*
+Function Name: search_in_bst
+Input Params:  Root of the tree, item data to be searched
+Return Type:   1 if found, 0 if not found
+Description:   Searches for the specified data in the tree
+*/
+int search_in_bst(TREE * root, int data)
 {
-    if(root==NULL)
+    TREE * currnode;
+    currnode = root;
+    while (currnode != NULL && data != currnode->data.price)
     {
-        //printf("Tree is empty\n");
+        if(data < currnode->data.price)
+            currnode  = currnode->left;
+        else
+            currnode = currnode->right;
+    }
+
+    if(currnode == NULL)  {
+        printf("Item not found\n");
         return 0;
     }
-    if(root->data==data)
+    else
     {
-        //printf("Item found\n");
+        printf("There is a house for that budget!\n");
+        printf("%s\t %d\t %d\t %d\t %d\t %d\t %d\t %c\t %d\t \n",currnode->data.location,currnode->data.price,currnode->data.x_cord,currnode->data.y_cord,currnode->data.sizel,currnode->data.sizeb,currnode->data.no_of_bedrooms,currnode->data.type,currnode->data.year);
         return 1;
     }
-    if(data<root->data)
-        search(root->left,data);
-    else
-        search(root->right,data);
 }
 
-
+/*
+Function Name: merge
+Input Params:  arr(int []) - Array to be sorted
+               l(int) - Left index
+               m(int) - Middle index
+               r(int) - Right index
+Return Type:   NULL
+Description:   Merges two subarrays of arr[]
+*/
 void merge(int arr[],int l,int m,int r)
 {
     int i,j,k;
@@ -522,6 +547,14 @@ void merge(int arr[],int l,int m,int r)
     }
 }
 
+/*
+Function Name: mergesort
+Input Params:  arr(int []) - Array to be sorted
+               l(int) - Left index
+               r(int) - Right index
+Return Type:   NULL
+Description:   Sorts the array using the merge sort algorithm
+*/
 void mergesort(int arr[],int l,int r)
 {
     if(l<r)
@@ -532,7 +565,14 @@ void mergesort(int arr[],int l,int r)
         merge(arr,l,m,r);
     }
 }
-
+/*
+Function Name: quicksort
+Input Params:  arr(int []) - Array to be sorted
+               low(int) - Left index
+               high(int) - Right index
+Return Type:   NULL
+Description:   Sorts the array using the quick sort algorithm
+*/
 void quicksort(int arr[],int low,int high)
 {
     int i,j,pivot,temp;
@@ -562,7 +602,13 @@ void quicksort(int arr[],int low,int high)
     }
 }
 
-
+/*
+Function Name: bubble_sort
+Input Params:  arr(int []) - Array to be sorted
+               n(int) - Size of the array
+Return Type:   NULL
+Description:   Sorts the array using the bubble sort algorithm
+*/
 void bubble_sort(int arr[],int n)
 {
     int i,j,temp;
@@ -581,7 +627,13 @@ void bubble_sort(int arr[],int n)
     }
 }
 
-
+/*
+Function Name: selection_sort
+Input Params:  arr(int []) - Array to be sorted
+               n(int) - Size of the array
+Return Type:   NULL
+Description:   Sorts the array using the selection sort algorithm
+*/
 void selection_sort(int arr[],int n)
 {
     int i,j,min,temp;
@@ -599,7 +651,13 @@ void selection_sort(int arr[],int n)
     }
 }
 
-
+/*
+Function Name: insertion_sort
+Input Params:  arr(int []) - Array to be sorted
+               n(int) - Size of the array
+Return Type:   NULL
+Description:   Sorts the array using the insertion sort algorithm
+*/
 void insertion_sort(int arr[],int n)
 {
     int i,j,key;
@@ -615,7 +673,13 @@ void insertion_sort(int arr[],int n)
         arr[j+1]=key;
     }
 }
-
+/*
+Function Name: shuffle
+Input Params:  arr(int []) - Array to be shuffled
+               n(int) - Size of the array
+Return Type:   NULL
+Description:   Shuffles the array
+*/
 void shuffle(int arr[],int n)
 {
     int i,temp;
@@ -627,6 +691,13 @@ void shuffle(int arr[],int n)
     }
 }
 
+/*
+Function Name: is_sorted
+Input Params:  arr(int []) - Array to be checked
+               n(int) - Size of the array
+Return Type:   1 if sorted, 0 if not sorted
+Description:   Checks if the array is sorted
+*/
 int is_sorted(int arr[],int n)
 {
     int i;
@@ -637,7 +708,13 @@ int is_sorted(int arr[],int n)
     }
     return 1;
 }
-
+/*
+Function Name: bad_luck_sort
+Input Params:  arr(int []) - Array to be sorted
+               n(int) - Size of the array
+Return Type:   NULL
+Description:   Sorts the array using the bad luck sort algorithm
+*/
 void bad_luck_sort(int arr[],int n)
 {
     int i;
@@ -647,74 +724,93 @@ void bad_luck_sort(int arr[],int n)
     }
 }
 
-//use trie data structure to store the locality names and search for the locality name entered by the user
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+ 
+// Alphabet size (# of symbols)
+#define ALPHABET_SIZE (26)
+ 
+// Converts key current character into index
+// use only 'a' through 'z' and lower case
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+ 
 
-struct trie_node
+/*
+Function Name: getNode_trie
+Input Params:  NULL
+Return Type:   struct TrieNode *
+Description:   Returns new trie node (initialized to NULLs)
+*/
+struct TrieNode *getNode_trie()
 {
-    int value;
-    struct trie_node *children[26];
-};
-
-struct trie_node *get_node()
-{
-    struct trie_node *pnode=NULL;
-    pnode=(struct trie_node *)malloc(sizeof(struct trie_node));
-    if(pnode)
+    struct TrieNode *pNode = NULL;
+ 
+    pNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));
+ 
+    if (pNode)
     {
         int i;
-        pnode->value=0;
-        for(i=0;i<26;i++)
-            pnode->children[i]=NULL;
+ 
+        pNode->isEndOfWord = false;
+ 
+        for (i = 0; i < ALPHABET_SIZE; i++)
+            pNode->children[i] = NULL;
     }
-    return pnode;
+ 
+    return pNode;
 }
-
-void insert(struct trie_node *root,char *key)
+ 
+/*
+Function Name: insert_trie
+Input Params:  root(struct TrieNode *) - Root of the trie
+               key(const char *) - Key to be inserted
+Return Type:   NULL
+Description:   Inserts the key into the trie
+*/
+void insert_trie(struct TrieNode *root, const char key[4])
 {
     int level;
-    int length=strlen(key);
+    int length = strlen(key);
     int index;
-    struct trie_node *pnode=root;
-    for(level=0;level<length;level++)
+ 
+    struct TrieNode *pCrawl = root;
+ 
+    for (level = 0; level < length; level++)
     {
-        index=key[level]-'a';
-        if(!pnode->children[index])
-            pnode->children[index]=get_node();
-        pnode=pnode->children[index];
+        index = (int)key[level] - 'A';
+        if (!pCrawl->children[index])
+            pCrawl->children[index] = getNode_trie();
+ 
+        pCrawl = pCrawl->children[index];
     }
-    pnode->value=1;
+ 
+    // mark last node as leaf
+    pCrawl->isEndOfWord = true;
 }
+ 
 
-int search(struct trie_node *root,char *key)
+/*
+Function Name: search_trie
+Input Params:  root(struct TrieNode *) - Root of the trie
+               key(const char *) - Key to be searched for
+Return Type:   bool
+Description:   Searches for the key in the trie
+*/
+bool search_trie(struct TrieNode *root, const char *key)
 {
     int level;
-    int length=strlen(key);
+    int length = strlen(key);
     int index;
-    struct trie_node *pnode=root;
-    for(level=0;level<length;level++)
+    struct TrieNode *pCrawl = root;
+ 
+    for (level = 0; level < length; level++)
     {
-        index=key[level]-'a';
-        if(!pnode->children[index])
-            return 0;
-        pnode=pnode->children[index];
+        index = (int)key[level] - 'A';
+ 
+        if (!pCrawl->children[index])
+            return false;
+ 
+        pCrawl = pCrawl->children[index];
     }
-    return (pnode!=NULL && pnode->value);
+ 
+    return (pCrawl->isEndOfWord);
 }
-
-int is_leaf_node(struct trie_node *root)
-{
-    return root->value!=0;
-}
-
-int is_free_node(struct trie_node *root)
-{
-    int i;
-    for(i=0;i<26;i++)
-    {
-        if(root->children[i])
-            return 0;
-    }
-    return 1;
-}
-
-

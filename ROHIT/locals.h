@@ -21,22 +21,15 @@ struct user_credentials {
 
 struct homeRecord
 {
-    char house_id[7];
-    long long int price;
-    struct location l;
-    struct size s;
+    char location[4];
+    int price;
+    int x_cord;
+    int y_cord;
+    int sizel;
+    int sizeb;
     int no_of_bedrooms;
     char type;
     int year;
-};
-
-struct user_profile
-{
-    char username[50];
-    char name[50];
-    long long int budget;
-    char location[50];
-    char hashed_pass[50];
 };
 
 struct tree
@@ -46,14 +39,34 @@ struct tree
 	struct tree *right;
 };
 typedef struct tree TREE;
+TREE * root=NULL;
+int choice = 0;
+int data = 0;
+int count = 0;
 
+
+struct TrieNode
+{
+    struct TrieNode *children[ALPHABET_SIZE];
+ 
+    // isEndOfWord is true if the node represents
+    // end of a word
+    bool isEndOfWord;
+};
+ 
+ 
 char username[20];//stores the username entered by the user
 char password[20];//stores the password entered by the user
 char usname[20];//stores the username entered by the user(temporary variable)
 char psword[20];//stores the password entered by the user(temporary variable)
 
-FILE *fp, *fp1;//file pointer to open the username_password.txt file
-
+FILE *fp1, *fp2;//file pointer to open the username_password.txt file
+struct TrieNode *trie_root;
+int budget_sort[100];
+int budget_size;
 int choice;
+int search_budget;
+char search_locality[20];
 struct user_credentials users[100]; // initialize an array of type user_credentials,Adjust the size based on the number of users
+struct homeRecord records[100]; // initialize an array of type homeRecord,Adjust the size based on the number of records
 #endif // LOCALS_H_INCLUDED
