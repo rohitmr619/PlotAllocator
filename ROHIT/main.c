@@ -7,11 +7,14 @@ int main() {
     
     filePointerinit();//opens the username_password.txt file
     readDataFromFile(users,records, 2);
+    for(int i=0;i<20;i++)
+    {
+        budget_sort[i]=records[i].price;
+    }
     for ( int i = 0; i < 20; i++)
     {
         root=insert_into_bst(root, records[i]);
     }
-    inorder(root);
     //printf("test");
     while (1) {
         mainMenu(); // Menu to display the welcome message and prompt the user to enter the username
@@ -52,12 +55,38 @@ int main() {
                     printf("No houses available in this locality\n");
                 }
             }
+            else if(choice==2)
+            {
+                printf("The Costs of the houses are: \n");
+                srand(time(0));
+                int num = rand()%6;
+                switch(num)
+                {
+                    case 1: bubble_sort(budget_sort, 20);
+                            break;
+                    case 2: insertion_sort(budget_sort, 20);
+                            break;
+                    case 3: selection_sort(budget_sort, 20);
+                            break;
+                    case 4: mergesort(budget_sort, 0, 19);
+                            break;
+                    case 5: quicksort(budget_sort, 0, 19);        
+                            break;
+                    case 6: bad_luck_sort(budget_sort, 20);
+                            break;
+                    
+                }
+                for(int i=0;i<20;i++)
+                {
+                    printf("%d ", budget_sort[i]);
+                }
+                printf("\n" );
+            }
             else
             {
                 printf("Invalid choice\n");
                 exit(0);
             }
-            break;
         }
         else if(choice==2){
             sign_up();

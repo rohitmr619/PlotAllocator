@@ -724,6 +724,8 @@ void bad_luck_sort(int arr[],int n)
     }
 }
 
+
+
 #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
  
 // Alphabet size (# of symbols)
@@ -733,6 +735,14 @@ void bad_luck_sort(int arr[],int n)
 // use only 'a' through 'z' and lower case
 #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
  
+struct TrieNode
+{
+    struct TrieNode *children[ALPHABET_SIZE];
+ 
+    // isEndOfWord is true if the node represents
+    // end of a word
+    bool isEndOfWord;
+};
 
 /*
 Function Name: getNode_trie
@@ -814,3 +824,4 @@ bool search_trie(struct TrieNode *root, const char *key)
  
     return (pCrawl->isEndOfWord);
 }
+

@@ -45,16 +45,7 @@ int data = 0;
 int count = 0;
 
 
-struct TrieNode
-{
-    struct TrieNode *children[ALPHABET_SIZE];
- 
-    // isEndOfWord is true if the node represents
-    // end of a word
-    bool isEndOfWord;
-};
- 
- 
+
 char username[20];//stores the username entered by the user
 char password[20];//stores the password entered by the user
 char usname[20];//stores the username entered by the user(temporary variable)
