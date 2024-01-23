@@ -481,4 +481,242 @@ search(TREE *root,int data)
         search(root->right,data);
 }
 
+//write a function to print all the houses budget in sorted manner using merge sort
+
+void merge(int arr[],int l,int m,int r)
+{
+    int i,j,k;
+    int n1=m-l+1;
+    int n2=r-m;
+    int L[n1],R[n2];
+    for(i=0;i<n1;i++)
+        L[i]=arr[l+i];
+    for(j=0;j<n2;j++)
+        R[j]=arr[m+1+j];
+    i=0;
+    j=0;
+    k=l;
+    while(i<n1 && j<n2)
+    {
+        if(L[i]<=R[j])
+        {
+            arr[k]=L[i];
+            i++;
+        }
+        else
+            {
+                arr[k]=R[j];
+                j++;
+            }
+        k++;
+    }
+    while(i<n1)
+    {
+        arr[k]=L[i];
+        i++;
+        k++;
+    }
+    while(j<n2)
+    {
+        arr[k]=R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergesort(int arr[],int l,int r)
+{
+    if(l<r)
+    {
+        int m=(l+r)/2;
+        mergesort(arr,l,m);
+        mergesort(arr,m+1,r);
+        merge(arr,l,m,r);
+    }
+}
+
+void quicksort(int arr[],int low,int high)
+{
+    int i,j,pivot,temp;
+    if(low<high)
+    {
+        pivot=low;
+        i=low;
+        j=high;
+        while(i<j)
+        {
+            while(arr[i]<=arr[pivot] && i<high)
+                i++;
+            while(arr[j]>arr[pivot])
+                j--;
+            if(i<j)
+            {
+                temp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=temp;
+            }
+        }
+        temp=arr[pivot];
+        arr[pivot]=arr[j];
+        arr[j]=temp;
+        quicksort(arr,low,j-1);
+        quicksort(arr,j+1,high);
+    }
+}
+
+
+void bubble_sort(int arr[],int n)
+{
+    int i,j,temp;
+    for(i=0;i<n-1;i++)
+    {
+        for(j=0;j<n-i-1;j++)
+            {
+                if(arr[j]>arr[j+1])
+                {
+                    temp=arr[j];
+                    arr[j]=arr[j+1];
+                    arr[j+1]=temp;
+                }
+
+            }
+    }
+}
+
+
+void selection_sort(int arr[],int n)
+{
+    int i,j,min,temp;
+    for(i=0;i<n-1;i++)
+    {
+        min=i;
+        for(j=i+1;j<n;j++)
+            {
+                if(arr[j]<arr[min])
+                    min=j;
+            }
+        temp=arr[i];
+        arr[i]=arr[min];
+        arr[min]=temp;
+    }
+}
+
+
+void insertion_sort(int arr[],int n)
+{
+    int i,j,key;
+    for(i=1;i<n;i++)
+    {
+        key=arr[i];
+        j=i-1;
+        while(j>=0 && arr[j]>key)
+            {
+                arr[j+1]=arr[j];
+                j=j-1;
+            }
+        arr[j+1]=key;
+    }
+}
+
+void shuffle(int arr[],int n)
+{
+    int i,temp;
+    for(i=0;i<n;i++)
+    {
+        temp=arr[i];
+        arr[i]=arr[rand()%n];
+        arr[rand()%n]=temp;
+    }
+}
+
+int is_sorted(int arr[],int n)
+{
+    int i;
+    for(i=0;i<n-1;i++)
+    {
+        if(arr[i]>arr[i+1])
+            return 0;
+    }
+    return 1;
+}
+
+void bad_luck_sort(int arr[],int n)
+{
+    int i;
+    while(!is_sorted(arr,n))
+    {
+        shuffle(arr,n);
+    }
+}
+
+//use trie data structure to store the locality names and search for the locality name entered by the user
+
+struct trie_node
+{
+    int value;
+    struct trie_node *children[26];
+};
+
+struct trie_node *get_node()
+{
+    struct trie_node *pnode=NULL;
+    pnode=(struct trie_node *)malloc(sizeof(struct trie_node));
+    if(pnode)
+    {
+        int i;
+        pnode->value=0;
+        for(i=0;i<26;i++)
+            pnode->children[i]=NULL;
+    }
+    return pnode;
+}
+
+void insert(struct trie_node *root,char *key)
+{
+    int level;
+    int length=strlen(key);
+    int index;
+    struct trie_node *pnode=root;
+    for(level=0;level<length;level++)
+    {
+        index=key[level]-'a';
+        if(!pnode->children[index])
+            pnode->children[index]=get_node();
+        pnode=pnode->children[index];
+    }
+    pnode->value=1;
+}
+
+int search(struct trie_node *root,char *key)
+{
+    int level;
+    int length=strlen(key);
+    int index;
+    struct trie_node *pnode=root;
+    for(level=0;level<length;level++)
+    {
+        index=key[level]-'a';
+        if(!pnode->children[index])
+            return 0;
+        pnode=pnode->children[index];
+    }
+    return (pnode!=NULL && pnode->value);
+}
+
+int is_leaf_node(struct trie_node *root)
+{
+    return root->value!=0;
+}
+
+int is_free_node(struct trie_node *root)
+{
+    int i;
+    for(i=0;i<26;i++)
+    {
+        if(root->children[i])
+            return 0;
+    }
+    return 1;
+}
+
 
