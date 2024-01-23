@@ -824,7 +824,14 @@ bool search_trie(struct TrieNode *root, const char *key)
 }
 
 
-//print the nearest houses to given house
+/*
+Function Name: dijikstra
+Input Params:  graph(int [][NUM_HOUSES]) - Adjacency matrix of the graph
+               src(int) - Source vertex
+               nearestHouses(int [NUM_HOUSES]) - Array to store the nearest houses
+Return Type:   NULL
+Description:   Finds the shortest path from the source vertex to all other vertices
+*/
 void dijikstra(int graph[NUM_HOUSES][NUM_HOUSES], int src, int nearestHouses[NUM_HOUSES]) {
     int dist[NUM_HOUSES]; // Shortest distance from source to each house
     int visited[NUM_HOUSES]; // Marks whether a house is visited or not
