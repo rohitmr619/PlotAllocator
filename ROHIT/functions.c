@@ -26,14 +26,13 @@ Return Type:   FILE *
 Description:   Opens the username_password.txt file
 
 */
-FILE* filePointerinit(FILE *fp){
+void filePointerinit(){
     fp=fopen("username_password.txt","r");
     fp1=fopen("house_dataset_sale.txt","r");
     if (fp == NULL || fp1 == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
-    return fp;
 }
 
 /*

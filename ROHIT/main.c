@@ -5,7 +5,7 @@
 
 int main() {
     
-    fp=filePointerinit(fp);//opens the username_password.txt file
+    filePointerinit(fp);//opens the username_password.txt file
     readDataFromFile(users, 2, fp);  // Reads data from username_password.txt and stores it in users array.
 
     while (1) {
