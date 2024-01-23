@@ -481,7 +481,6 @@ search(TREE *root,int data)
         search(root->right,data);
 }
 
-//write a function to print all the houses budget in sorted manner using merge sort
 
 void merge(int arr[],int l,int m,int r)
 {
