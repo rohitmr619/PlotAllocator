@@ -12,6 +12,21 @@ struct size
     int m,n; // dimensions of the home/plot
 };
 
+struct agent_data
+{
+    char name[50];
+    long long int ph_no;
+    char locality[20];
+    int salary;
+};
+typedef struct agent_data agent;
+
+struct Node {
+    struct agent_data data;
+    struct Node* next;
+};
+
+struct Node *head = NULL;
 struct user_credentials {
     char username[50];
     char hashed_pass[50];
@@ -75,7 +90,9 @@ char password[20];//stores the password entered by the user
 char usname[20];//stores the username entered by the user(temporary variable)
 char psword[20];//stores the password entered by the user(temporary variable)
 
-FILE *fp1, *fp2;//file pointer to open the username_password.txt file
+FILE *fp1, *fp2;
+FILE *fp3;//file pointer to open the username_password.txt file
+struct Node* favoritesList = NULL;
 struct TrieNode *trie_root;
 int budget_sort[100];
 int budget_size;
@@ -83,6 +100,12 @@ int choice;
 int search_budget;
 char search_locality[20];
 int nearest_houses[20];
+int windowSize = 5;
+int start = 0;
+int end = 5;
 struct user_credentials users[100]; // initialize an array of type user_credentials,Adjust the size based on the number of users
 struct homeRecord records[100]; // initialize an array of type homeRecord,Adjust the size based on the number of records
+struct agent_data agents[100]; // initialize an array of type agent_data,Adjust the size based on the number of agents
+int agent_selected;
+int fav_list[24];
 #endif // LOCALS_H_INCLUDED

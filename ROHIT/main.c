@@ -31,6 +31,7 @@ int main() {
             printf("Check all the records sorted by price? press 2 to continue: \n");
             printf("Search for a specific locality? press 3 to continue: \n");
             printf("Search for other nearby houses? press 4 to continue: \n");
+            printf("View all agents? press 5 to continue: \n");
             scanf("%d", &choice);
             if(choice==1)
             {
@@ -97,6 +98,11 @@ int main() {
                     &records[nearest_houses[i]].y_cord, &records[nearest_houses[i]].sizel, &records[nearest_houses[i]].sizeb, &records[nearest_houses[i]].no_of_bedrooms, 
                     &records[nearest_houses[i]].type, &records[nearest_houses[i]].year);
                 }
+            }
+            else if(choice==5)
+            {
+                agents_load();
+                display_agents(agents,0,24);
             }
             else
             {

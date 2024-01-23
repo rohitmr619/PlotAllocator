@@ -869,3 +869,135 @@ void dijikstra(int graph[NUM_HOUSES][NUM_HOUSES], int src, int nearestHouses[NUM
     }
 }
 
+/*
+Function Name: agents_load()
+Input Params:  NULL
+Return Type:   NULL
+Description:   Loads the agents data from the real_agents_contacts.txt file
+*/
+void agents_load()
+{
+    fp3=fopen("real_agents_contacts.txt","r");
+    if (fp1 == NULL) {
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
+    }
+    int i = 0;
+    while(!feof(fp3))
+    {
+        fscanf(fp3,"%s %11d %s %11d",agents[i].name, &agents[i].ph_no, agents[i].locality, &agents[i].salary);
+        i++;
+    }
+    fclose(fp3);
+}
+
+/*
+Function Name: display_agents()
+Input Params:  agents(struct agent_data []) - Array of type agent_data
+               start(int) - Starting index
+               end(int) - Ending index
+Return Type:   NULL
+Description:   Displays the agents data
+*/
+void display_agents(struct agent_data agents[24], int start, int end) {
+    printf("\n---------------------------------------------------------\n");
+    printf("| %-15s | %-15s | %-20s | %-10s |\n", "Name", "Phone Number", "Locality", "Salary");
+    printf("---------------------------------------------------------\n");
+    
+    for (int i = start; i < end; i++) {
+        printf("| %d | %-15s | %-15lld | %-20s | %-10d |\n",i+1, agents[i].name, agents[i].ph_no, agents[i].locality, agents[i].salary);
+    }
+
+    printf("---------------------------------------------------------\n");
+}
+
+/*
+Function Name: display_fav_agents()
+Input Params:  agents(struct agent_data []) - Array of type agent_data
+               start(int) - Starting index
+               end(int) - Ending index
+Return Type:   NULL
+Description:   Displays the favourite agents data
+*/
+void add_to_favs()
+{
+    int i=0,axt=1;
+    printf("Would you like to add any to favourites?\n");
+    printf("1.Yes\n");
+    printf("2.No\n");
+    scanf("%d",&choice);
+    //use linked list to add to favourites
+    switch(choice)
+    {
+        case 1: while(axt)
+                {
+                    printf("Enter the agent number you want to add to favourites\n");
+                    scanf("%d",&agent_selected);
+                    if(agent_selected>0 && agent_selected<25)
+                    {
+                        fav_list[i]=agent_selected;
+                        i++;
+                        printf("Agent added to favourites\n");
+                        printf("Would you like to add more?\n");
+                        printf("1.Yes\n");
+                        printf("0.No\n");
+                        scanf("%d",&axt);
+                    }
+                }
+                break;
+        case 2: break;
+        default: printf("Invalid choice\n");
+                 exit(0);
+    }
+}
+
+
+/*
+Function Name: display_fav_agents()
+Input Params:  agents(struct agent_data []) - Array of type agent_data
+               start(int) - Starting index
+               end(int) - Ending index
+Return Type:   NULL
+Description:   Displays the favourite agents data
+*/
+struct Node* create_node(struct agent_data data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+
+    if (new_node == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->data = data;
+    new_node->next = NULL;
+
+    return new_node;
+}
+
+/*
+Function Name: insert_node()
+Input Params:  head(struct Node **) - Pointer to the head of the linked list
+               data(struct agent_data) - Data to be inserted
+Return Type:   NULL
+Description:   Inserts a node into the linked list
+*/
+void insert_node(struct Node** head, struct agent_data data) {
+    struct Node* new_node = create_node(data);
+
+    new_node->next = *head;
+    *head = new_node;
+}
+
+/*
+Function Name: print_list()
+Input Params:  head(struct Node *) - Pointer to the head of the linked list
+Return Type:   NULL
+Description:   Prints the linked list
+*/
+void print_list(struct Node* head) {
+    while (head != NULL) {
+        printf("| %-15s | %-15lld | %-20s | %-10d |\n", head->data.name, head->data.ph_no, head->data.locality, head->data.salary);
+        head = head->next;
+    }
+    printf("----------------------------------------------\n");
+}
