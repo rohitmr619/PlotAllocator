@@ -6,8 +6,8 @@
 
 int main() {
     
-    filePointerinit();//opens the username_password.txt file
-    readDataFromFile(users,records, 2);
+    file_pointerinit();//opens the username_password.txt file
+    read_data_fromfile(users,records, 2);
     for(int i=0;i<20;i++)
     {
         budget_sort[i]=records[i].price;
@@ -18,7 +18,7 @@ int main() {
     }
     //printf("test");
     while (1) {
-        mainMenu(); // Menu to display the welcome message and prompt the user to enter the username
+        main_menu(); // Menu to display the welcome message and prompt the user to enter the username
         sign_in_menu();
         printf("Enter your choice:");
         scanf("%d",&choice);

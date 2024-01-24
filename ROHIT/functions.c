@@ -12,7 +12,7 @@ Input Params:  NULL
 Return Type:   NULL
 Description:   Displays the welcome message and prompts the user to enter the username
 */
-void mainMenu() {
+void main_menu() {
     for(int i = 0; i<80; i++)
         printf("*");
     printf("\n\t\t\tHOME PURCHASE BOT\n\n");
@@ -27,7 +27,7 @@ Input Params:  NULL
 Return Type:   FILE *
 Description:   Opens the username_password.txt file
 */
-void filePointerinit(){
+void file_pointerinit(){
     fp1=fopen("username_password.txt","r");
     fp2=fopen("house_dataset_sale.txt","r");
     if (fp1 == NULL || fp2 == NULL) {
@@ -88,7 +88,7 @@ void password_compare(char *user_password, char *password) {
 }
 
 /*
-Function Name: readDataFromFile
+Function Name: read_datafromfile
 Input Params:  users(struct user_credentials []) - Array of type user_credentials
                size(int) - Size of the users array
                fp(FILE *) - File pointer to open the username_password.txt file
@@ -96,7 +96,7 @@ Return Type:   NULL
 Description:   Reads data from username_password.txt and stores it in users array.
 */
 
-void readDataFromFile(struct user_credentials users[],struct homeRecord records[], int size) 
+void read_data_fromfile(struct user_credentials users[],struct homeRecord records[], int size) 
 {
     trie_root = getNode_trie();
     int counter=0;
@@ -125,35 +125,7 @@ void readDataFromFile(struct user_credentials users[],struct homeRecord records[
     budget_size = i;
 }
 
-/*
-Function Name: buildPrefix
-Input Params:  pattern(char *) - Pattern to be searched for
-               m(int) - Length of the pattern
-               prefix(int *) - Prefix array
-Return Type:   NULL
-Description:   Builds the prefix array for the Knuth-Morris-Pratt algorithm
-*/
-void buildPrefix(char *pattern, int m, int *prefix) {
-    int length = 0;
-    int i = 1;
 
-    prefix[0] = 0;
-
-    while (i < m) {
-        if (pattern[i] == pattern[length]) {
-            length++;
-            prefix[i] = length;
-            i++;
-        } else {
-            if (length != 0) {
-                length = prefix[length - 1];
-            } else {
-                prefix[i] = 0;
-                i++;
-            }
-        }
-    }
-}
 
 /*
 Function Name: Knuth_Morris_Pratt
