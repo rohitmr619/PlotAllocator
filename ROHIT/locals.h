@@ -1,8 +1,6 @@
 #ifndef LOCALS_H_INCLUDED
 #define LOCALS_H_INCLUDED
 #define NUM_HOUSES 20
-#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
-#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
 
 struct location
 {
@@ -105,6 +103,7 @@ int nearest_houses[20];
 int windowSize = 5;
 int start = 0;
 int end = 5;
+int fav_count;
 struct user_credentials users[100]; // initialize an array of type user_credentials,Adjust the size based on the number of users
 struct homeRecord records[100]; // initialize an array of type homeRecord,Adjust the size based on the number of records
 struct agent_data agents[100]; // initialize an array of type agent_data,Adjust the size based on the number of agents
