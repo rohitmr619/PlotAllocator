@@ -1,6 +1,8 @@
 #ifndef LOCALS_H_INCLUDED
 #define LOCALS_H_INCLUDED
 #define NUM_HOUSES 20
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
 
 struct location
 {

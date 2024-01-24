@@ -41,6 +41,7 @@ Function Name: password_hasher
 Input Params:  password(char *) - Password entered by the user
 Return Type:   NULL
 Description:   Hashes the password entered by the user
+efficiency: O(n)
 */
 void password_hasher(char *password) {
     int i;
@@ -48,6 +49,7 @@ void password_hasher(char *password) {
         password[i] = (password[i] + 3);
     }
 }
+
 
 /*
 Function Name: brute_force_compare
@@ -66,6 +68,7 @@ int brute_force_compare(char *str1, char *str2) {
     }
     return (*str1 == '\0' && *str2 == '\0'); // Both strings are equal if both are null-terminated
 }
+
 
 /*
 Function Name: password_compare
@@ -356,7 +359,8 @@ void inorder(TREE *troot)
 	if(troot != NULL)
     	{
         	inorder(troot->left);
-        	printf("%s\t %d\t %d\t %d\t %d\t %d\t %d\t %c\t %d\t \n",troot->data.location,troot->data.price,troot->data.x_cord,troot->data.y_cord,troot->data.sizel,troot->data.sizeb,troot->data.no_of_bedrooms,troot->data.type,troot->data.year);
+        	printf("%s\t %d\t %d\t %d\t %d\t %d\t %d\t %c\t %d\t \n",troot->data.location,
+            troot->data.price,troot->data.x_cord,troot->data.y_cord,troot->data.sizel,troot->data.sizeb,troot->data.no_of_bedrooms,troot->data.type,troot->data.year);
         	inorder(troot->right);
 	}
 }
@@ -565,6 +569,7 @@ void mergesort(int arr[],int l,int r)
         merge(arr,l,m,r);
     }
 }
+
 /*
 Function Name: quicksort
 Input Params:  arr(int []) - Array to be sorted
@@ -724,18 +729,10 @@ void bad_luck_sort(int arr[],int n)
     }
 }
 
-#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
- 
-// Alphabet size (# of symbols)
-#define ALPHABET_SIZE (26)
- 
-// Converts key current character into index
-// use only 'a' through 'z' and lower case
-#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
- 
+
 struct TrieNode
 {
-    struct TrieNode *children[ALPHABET_SIZE];
+    struct TrieNode *children[26];
  
     // isEndOfWord is true if the node represents
     // end of a word
@@ -760,7 +757,7 @@ struct TrieNode *getNode_trie()
  
         pNode->isEndOfWord = false;
  
-        for (i = 0; i < ALPHABET_SIZE; i++)
+        for (i = 0; i <26; i++)
             pNode->children[i] = NULL;
     }
  

@@ -103,6 +103,12 @@ int main() {
             {
                 agents_load();
                 display_agents(agents,0,24);
+                add_to_favs();
+                for(int i=0;i<strlen(fav_list);i++)
+                {
+                insert_node(head, agents[fav_list[i]]);
+                }
+                print_list(head);
             }
             else
             {
