@@ -978,11 +978,21 @@ Input Params:  head(struct Node **) - Pointer to the head of the linked list
 Return Type:   NULL
 Description:   Inserts a node into the linked list
 */
-void insert_node(struct Node** head, struct agent_data data) {
-    struct Node* new_node = create_node(data);
+void insert_node(struct Node** head, struct agent_data temp) {
+    struct Node* p = create_node(temp);
+    struct Node* cur = *head;
 
-    new_node->next = *head;
-    *head = new_node;
+    if(*head == NULL)
+    {
+        *head = p;
+        return;
+    }
+
+    while(cur->next)
+    {
+        cur = cur->next;
+    }
+    cur->next = p;
 }
 
 /*
@@ -992,9 +1002,10 @@ Return Type:   NULL
 Description:   Prints the linked list
 */
 void print_list(struct Node* head) {
-    while (head != NULL) {
-        printf("| %-15s | %-15lld | %-20s | %-10d |\n", head->data.name, head->data.ph_no, head->data.locality, head->data.salary);
-        head = head->next;
+    struct Node *cur = head;
+    while (cur != NULL) {
+        printf("| %-15s | %-15lld | %-20s | %-10d |\n", cur->data.name, cur->data.ph_no, cur->data.locality, cur->data.salary);
+        cur = cur->next;
     }
     printf("----------------------------------------------\n");
 }
